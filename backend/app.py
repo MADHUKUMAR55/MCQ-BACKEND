@@ -64,22 +64,22 @@ chapters = [
     },
 ]
 
-@app.route('/subjects', methods=['GET'])
+@app.route('/api/subjects', methods=['GET'])
 def get_subjects():
     return jsonify(subjects)
 
-@app.route('/chapters', methods=['GET'])
+@app.route('/api/chapters', methods=['GET'])
 def get_chapters():
     subject_id = request.args.get('subjectId', type=int)
     filtered_chapters = [chapter for chapter in chapters if chapter['subjectId'] == subject_id]
     return jsonify(filtered_chapters)
 
 
-@app.route('/categories', methods=['GET'])
+@app.route('/api/categories', methods=['GET'])
 def get_categories():
     return jsonify(categories)
 
-@app.route('/subjects-by-category', methods=['GET'])
+@app.route('/api/subjects-by-category', methods=['GET'])
 def get_subjects_by_category():
     category_id = request.args.get('categoryId', type=int)
     category = next((cat for cat in categories if cat["id"] == category_id), None)
@@ -102,7 +102,7 @@ def write_scores(scores):
     with open('scores.json', 'w') as file:
         json.dump(scores, file, indent=4)
 
-@app.route('/submit-score', methods=['POST'])
+@app.route('/api/submit-score', methods=['POST'])
 def submit_score():
     data = request.json
     user_email = data.get('email')
@@ -127,7 +127,7 @@ def submit_score():
 
 
 ##analysis
-@app.route('/user-analysis', methods=['GET'])
+@app.route('/api/user-analysis', methods=['GET'])
 def user_analysis():
     user_email = request.args.get('email')
     scores = read_scores()
@@ -187,7 +187,7 @@ def user_analysis():
     return jsonify(analysis_data)
 
 
-@app.route('/polity-content', methods=['GET'])
+@app.route('/api/polity-content', methods=['GET'])
 def get_polity_content():
     try:
         with open('polity.json', 'r') as file:
@@ -211,4 +211,4 @@ def get_polity_content():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
